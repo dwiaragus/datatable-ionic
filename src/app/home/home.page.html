@@ -1,0 +1,109 @@
+<ion-header [translucent]="true">
+  <ion-toolbar color="dark">
+    <ion-title> Ionic Angular Datatables </ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content [fullscreen]="true">
+  <ion-button (click)="toggleBulkEdit()" expand="full"> Bulk Edit </ion-button>
+  <ion-button
+    (click)="bulkDelete()"
+    expand="full"
+    color="danger"
+    *ngIf="bulkEdit"
+  >
+    Bulk Delete
+  </ion-button>
+
+  <ion-row class="header-row">
+    <ion-col size="2" *ngIf="bulkEdit"> Select </ion-col>
+    <ion-col
+      size="6"
+      size-md="4"
+      size-lg="2"
+      tappable
+      (click)="sortBy('email')"
+    >
+      Email
+      <ion-icon name="arrow-down" *ngIf="sortDirection == 1"></ion-icon>
+      <ion-icon name="arrow-up" *ngIf="sortDirection == 2"></ion-icon>
+    </ion-col>
+    <ion-col size="2" class="ion-hide-md-down"> Login </ion-col>
+    <ion-col size="2"> First Name </ion-col>
+    <ion-col size="2"> Last Name </ion-col>
+    <ion-col size="2" class="ion-hide-lg-down"> Phone </ion-col>
+    <ion-col size="2" *ngIf="!bulkEdit"> Action </ion-col>
+  </ion-row>
+
+  <ion-row
+    *ngFor="let row of data; let i = index;"
+    class="data-row"
+    [ngClass]="[row.gender]"
+  >
+    <ion-col size="2" *ngIf="bulkEdit">
+      <ion-checkbox [(ngModel)]="edit[i]"></ion-checkbox>
+    </ion-col>
+    <ion-col size="6" size-md="4" size-lg="2"> {{ row.email }} </ion-col>
+    <ion-col size="2" class="ion-hide-md-down">
+      {{ row.login?.username }}
+    </ion-col>
+    <ion-col size="2"> {{ row.name?.first }} </ion-col>
+    <ion-col size="2"> {{ row.name?.last }} </ion-col>
+    <ion-col size="2" class="ion-hide-lg-down"> {{ row.phone }} </ion-col>
+    <ion-col size="2" *ngIf="!bulkEdit">
+      <ion-button
+        size="small"
+        (click)="removeRow(i)"
+        color="light"
+        fill="clear"
+      >
+        <ion-icon name="trash" slot="icon-only" size="small"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="12" class="ion-text-center">
+      {{ page + 1 }} of {{ totalPages }}
+    </ion-col>
+  </ion-row>
+
+  <ion-row>
+    <ion-col size="2">
+      <ion-button fill="clear" (click)="goFirst()">
+        <ion-icon name="play-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+
+    <ion-col size="2">
+      <ion-button fill="clear" (click)="prevPage()">
+        <ion-icon name="chevron-back" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+
+    <ion-col size="4" class="ion-text-center">
+      <ion-select
+        interface="popover"
+        [(ngModel)]="resultsCount"
+        (ionChange)="loadData()"
+      >
+        <ion-select-option [value]="5">5</ion-select-option>
+        <ion-select-option [value]="10">10</ion-select-option>
+        <ion-select-option [value]="15">15</ion-select-option>
+        <ion-select-option [value]="20">20</ion-select-option>
+      </ion-select>
+    </ion-col>
+
+    <ion-col size="2">
+      <ion-button fill="clear" (click)="nextPage()">
+        <ion-icon name="chevron-forward" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+
+    <ion-col size="2">
+      <ion-button fill="clear" (click)="goLast()">
+        <ion-icon name="play-forward" slot="icon-only"></ion-icon>
+      </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-content>
